@@ -1,13 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import ErrorPage from './pages/errorPage';
+import NotFoundPage from './pages/notFoundPage';
 import HomePage from './pages/homePage';
 import SearchPage from './pages/searchPage';
 import AppHeader from './components/AppHeader';
+import ErrorPage from './pages/errorPage';
+import FlashCardPage from './pages/flashCardPage';
+import LoginPage from './pages/loginPage';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import './styles.css';
+import { NotificationsContextProvider } from './context/notificationContext';
+import { UserContextProvider } from './context/userContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Notification } from './components/notification';
 
 const theme = createTheme({
   palette: {
@@ -25,12 +31,23 @@ const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <HomePage />,
+    element: <AppHeader />,
     errorElement: <ErrorPage />,
-  },
-  {
-    path: '/flashcards',
-    element: <SearchPage />,
+    children: [
+      { index: true, element: <HomePage /> },
+      {
+        path: '/flashcards',
+        element: <SearchPage />,
+      },
+      {
+        path: '/flashcards/:flashCardId',
+        element: <FlashCardPage />,
+      },
+      {
+        path: '/login',
+        element: <LoginPage />,
+      },
+    ],
   },
 ]);
 
@@ -38,10 +55,15 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        <AppHeader />
-        <RouterProvider router={router} />
-      </ThemeProvider>
+      <NotificationsContextProvider>
+        <UserContextProvider>
+          <ThemeProvider theme={theme}>
+            {/* <AppHeader /> */}
+            <RouterProvider router={router} />
+          </ThemeProvider>
+          <Notification />
+        </UserContextProvider>
+      </NotificationsContextProvider>
     </QueryClientProvider>
   </React.StrictMode>
 );

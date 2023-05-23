@@ -14,11 +14,10 @@ export default function ErrorPage() {
         sx={{ minHeight: '100vh' }}
       >
         <Typography variant="h1" align="center" sx={{ fontSize: '2rem' }}>
-          Sorry we could not find this page
+          Some Error ocured
         </Typography>
         <Typography variant="body1" align="center">
-          If you think that the page should exist or it was existing please
-          contact us
+          Please try again in few minutes
         </Typography>
       </Grid>
     </Container>

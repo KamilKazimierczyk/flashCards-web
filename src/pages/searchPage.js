@@ -7,13 +7,15 @@ import { Container } from '@mui/material';
 import { Grid, Typography } from '@mui/material';
 import FilterComponent from '../components/FilterComponent';
 import LoadingComponent from '../components/LoadingComponent';
+import { useSearchParams } from 'react-router-dom';
 
-export default function SearchPage({ text }) {
+export default function SearchPage() {
   const [filters, setFilters] = useState({
     from: 'Wybierz język',
     to: 'Wybierz język',
   });
   const [sort, setSort] = useState('Wybierz sortowanie');
+  let [text] = useSearchParams();
 
   const queryKey = ['flashCards'];
   if (text) queryKey.push(`text=${text}`);
