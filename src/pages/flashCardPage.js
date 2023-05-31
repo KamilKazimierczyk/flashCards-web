@@ -20,7 +20,9 @@ export default function FlashCardPage() {
     queryKey: ['flashCards', flashCardId],
     queryFn: () =>
       axios
-        .get(`${settings.apiUrl}/flashCard/${flashCardId}`)
+        .get(`${settings.apiUrl}/flashCard/${flashCardId}`, {
+          withCredentials: true,
+        })
         .then((res) => res.data),
   });
 
