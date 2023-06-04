@@ -8,13 +8,14 @@ import TextField from '@mui/material/TextField';
 import useNotification from '../hooks/useNotification';
 import useUser from '../hooks/useUser';
 import Button from '@mui/material/Button';
-import { redirect } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginPage() {
   const loginInput = useRef();
   const passwordInput = useRef();
-  const { user, login } = useUser();
+  const { login } = useUser();
   const { openNotification } = useNotification();
+  const navigate = useNavigate();
 
   const mutation = useMutation(
     (data) => {
@@ -29,6 +30,7 @@ export default function LoginPage() {
       onSuccess: (data, variables, context) => {
         openNotification('You have been successfully logged In', 'success');
         login(data.data.data.user);
+        navigate('/');
       },
     }
   );

@@ -4,10 +4,12 @@ import { settings } from '../config';
 import FlashCardItem from '../components/FlashCardItem';
 import axios from 'axios';
 import { Container } from '@mui/material';
-import { Grid, Typography } from '@mui/material';
+import { Grid, Typography, Button } from '@mui/material';
 import FilterComponent from '../components/FilterComponent';
 import LoadingComponent from '../components/LoadingComponent';
 import { useSearchParams } from 'react-router-dom';
+import useUser from '../hooks/useUser';
+import AddFlashCard from '../components/AddFlashCard';
 
 export default function SearchPage() {
   const [filters, setFilters] = useState({
@@ -16,6 +18,11 @@ export default function SearchPage() {
   });
   const [sort, setSort] = useState('Wybierz sortowanie');
   let [text] = useSearchParams();
+  const { user } = useUser();
+
+  const [openAdd, setOpenAdd] = useState(false);
+  const handleOpenAdd = () => setOpenAdd(true);
+  const handleCloseAdd = () => setOpenAdd(false);
 
   const queryKey = ['flashCards'];
   if (text) queryKey.push(`text=${text}`);
@@ -47,8 +54,28 @@ export default function SearchPage() {
   return (
     <Container sx={{ minHeight: '100vh' }}>
       <Grid container>
-        <Grid item xs={12}>
+        <Grid
+          item
+          xs={12}
+          sx={{ display: 'flex', justifyContent: 'space-between' }}
+        >
           <Typography variant="h4">Flashcards</Typography>
+          {user.loggedIn ? (
+            <Button
+              onClick={handleOpenAdd}
+              sx={{
+                m: 1,
+                display: 'block',
+                color: '#fff',
+              }}
+              variant="contained"
+            >
+              Add Flash card
+            </Button>
+          ) : (
+            ''
+          )}
+          <AddFlashCard open={openAdd} handleClose={handleCloseAdd} />
         </Grid>
         <Grid item xs={12}>
           <FilterComponent
