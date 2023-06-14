@@ -1,6 +1,5 @@
 import { Grid, Typography } from '@mui/material';
 import React from 'react';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { Link } from 'react-router-dom';
 
 export default function FlashCardItem({ item }) {

@@ -14,6 +14,9 @@ import { NotificationsContextProvider } from './context/notificationContext';
 import { UserContextProvider } from './context/userContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Notification } from './components/notification';
+import { RegisterPage } from './pages/registerPage';
+import { AdminPage } from './pages/adminPage';
+import { MePage } from './pages/mePage';
 
 const theme = createTheme({
   palette: {
@@ -47,8 +50,24 @@ const router = createBrowserRouter([
         path: '/login',
         element: <LoginPage />,
       },
+      {
+        path: '/register',
+        element: <RegisterPage />,
+      },
+      {
+        path: '/admin',
+        element: <AdminPage />,
+      },
+      {
+        path: '/me',
+        element: <MePage />,
+      },
     ],
   },
+  {
+    path: '*',
+    element: <><AppHeader /><NotFoundPage/></>
+  }
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

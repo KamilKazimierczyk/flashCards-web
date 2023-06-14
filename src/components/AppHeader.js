@@ -11,19 +11,15 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import { MemoryRouter, BrowserRouter, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import { Link as RouterLink } from 'react-router-dom';
-import { redirect } from 'react-router-dom';
 import useUser from '../hooks/useUser';
 import Link from '@mui/material/Link';
+import { isAdmin } from '../utils/isAdmin';
+import { settings } from '../config';
 
-function Router(props) {
-  const { children } = props;
-
-  return <BrowserRouter>{children}</BrowserRouter>;
-}
 
 function AppHeader() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -43,7 +39,7 @@ function AppHeader() {
       to: '/about',
     },
   ];
-  const settings = [
+  const menuSettings = [
     {
       name: 'My Profile',
       to: '/me',
@@ -67,7 +63,7 @@ function AppHeader() {
   const searchHandlerMobile = () => {
     if (searchInputRefMobile.current.value?.length) {
       window.location.assign(
-        `http://localhost:3001/flashcards?text=${searchInputRefMobile.current.value}`
+        `${settings.apiUrl}/flashcards?text=${searchInputRefMobile.current.value}`
       );
     } else setAnchorElSearch((prev) => !prev);
   };
@@ -75,7 +71,7 @@ function AppHeader() {
   const searchHandler = () => {
     if (searchInputRef.current.value?.length) {
       window.location.assign(
-        `http://localhost:3001/flashcards?text=${searchInputRef.current.value}`
+        `${settings.apiUrl}/flashcards?text=${searchInputRef.current.value}`
       );
     }
   };
@@ -154,8 +150,13 @@ function AppHeader() {
                     </Link>
                   </MenuItem>
                 ))}
+                {isAdmin(user) ? <MenuItem key="admin_page" onClick={handleCloseNavMenu}>
+                    <Link component={RouterLink} to="/admin">
+                      Admin Panel
+                    </Link>
+                  </MenuItem>: ''}
                 {user.loggedIn
-                  ? settings.map((page) =>
+                  ? menuSettings.map((page) =>
                       page.to ? (
                         <MenuItem key={page.name} onClick={handleCloseNavMenu}>
                           <Link component={RouterLink} to={page.to}>
@@ -266,6 +267,15 @@ function AppHeader() {
                   </Link>
                 </Button>
               ))}
+              {isAdmin(user) ? <Button
+                  key="admin_page"
+                  onClick={handleCloseNavMenu}
+                  sx={{ mx: 1, color: '#333', display: 'block' }}
+                >
+                  <Link component={RouterLink} to="/admin">
+                    Admin Panel
+                  </Link>
+                </Button>: ''}
             </Box>
 
             {user.loggedIn ? (
@@ -294,7 +304,7 @@ function AppHeader() {
                   open={Boolean(anchorElUser)}
                   onClose={handleCloseUserMenu}
                 >
-                  {settings.map((page) =>
+                  {menuSettings.map((page) =>
                     page.to ? (
                       <MenuItem key={page.name} onClick={handleCloseNavMenu}>
                         <Link component={RouterLink} to={page.to}>
